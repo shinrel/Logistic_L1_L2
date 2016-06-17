@@ -167,9 +167,13 @@ runAll <- function(dataSet) {
     
     
     #same model but implemented in glmnet
+    alpha <- 0.5
+    lambda <- 0.01
     model <- glmnet(XTrain, YTrain, family = "binomial", type.logistic="modified.Newton", alpha = alpha, lambda=lambda)
     predictedY <- predict(model, XTest, s=c(0.001), type="response", alpha= alpha, lambda= lambda)
-    accuracyGlmnet <- c(accuracyGlmnet, evalVector(predictedY, YTest))
+    predictedY <- replace(predictedY, predictedY < 0.5, 0)
+    predictedY <- replace(predictedY, predictedY > 0.5, 1)
+    accuracyGlmnet <- c(accuracyGlmnet, confusionMatrix(predictedY, YTest)$overall["Accuracy"])
     
     
     
@@ -181,6 +185,6 @@ runAll <- function(dataSet) {
 }
 
 dataSet <- read.csv('test.csv', header = T, sep=',')
-dataSet <- dataSet[1:100,]
+dataSet <- dataSet[1:50,]
 runAll(dataSet)
 
