@@ -174,6 +174,7 @@ runAll <- function(dataSet) {
     predictedY <- replace(predictedY, predictedY < 0.5, 0)
     predictedY <- replace(predictedY, predictedY > 0.5, 1)
     accuracyGlmnet <- c(accuracyGlmnet, confusionMatrix(predictedY, YTest)$overall["Accuracy"])
+    print(paste0("accuracy  from glment:",confusionMatrix(predictedY, YTest)$overall["Accuracy"]))
     
     
     
